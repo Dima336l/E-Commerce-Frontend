@@ -132,14 +132,21 @@ export default {
 }
 
 .btn-add {
-  background: #27ae60;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   width: 100%;
   margin-top: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-add:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
 }
 
 .btn-add:disabled {
