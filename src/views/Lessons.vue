@@ -95,10 +95,18 @@
             class="class-card-wrapper"
           >
             <div class="class-card">
-              <!-- Card Header -->
+              <!-- Card Header with Image -->
               <div class="card-header-custom">
-                <div class="subject-icon">
-                  <i :class="lesson.icon"></i>
+                <div class="lesson-image-container">
+                  <img 
+                    :src="`/images/${lesson.image}`" 
+                    :alt="`${lesson.subject} at ${lesson.location}`"
+                    class="lesson-image"
+                    @error="onImageError"
+                  />
+                  <div class="subject-icon-overlay">
+                    <i :class="lesson.icon"></i>
+                  </div>
                 </div>
                 <div class="availability-badge" :class="{ 'low-stock': lesson.space <= 2, 'out-of-stock': lesson.space === 0 }">
                   <i class="fas fa-users me-1"></i>
@@ -205,6 +213,11 @@ export default {
       this.searchTimeout = setTimeout(() => {
         // Search is handled by computed property
       }, 300)
+    },
+    onImageError(event) {
+      // Fallback to icon if image fails to load
+      event.target.style.display = 'none'
+      event.target.nextElementSibling.style.display = 'flex'
     }
   },
   async mounted() {
@@ -363,11 +376,44 @@ export default {
 }
 
 .card-header-custom {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 1.5rem;
+  position: relative;
+  padding: 0;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 1rem 1rem 0 0;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+}
+
+.lesson-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.lesson-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.subject-icon-overlay {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0.75rem;
+  display: none; /* Hidden by default, shown on image error */
   align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #667eea;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .subject-icon {
@@ -384,7 +430,10 @@ export default {
 }
 
 .availability-badge {
-  background: rgba(255, 255, 255, 0.9);
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.95);
   color: #1a202c;
   padding: 0.5rem 0.75rem;
   border-radius: 2rem;
@@ -392,6 +441,8 @@ export default {
   font-weight: 600;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 
 .availability-badge.low-stock {
