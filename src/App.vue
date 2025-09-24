@@ -47,8 +47,28 @@ export default {
 
 <style>
 #app {
-  font-family: 'Arial', sans-serif;
-  color: #2c3e50;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #1a202c;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  
+  .navbar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 .navbar {
