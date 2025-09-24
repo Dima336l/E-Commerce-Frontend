@@ -99,7 +99,7 @@
               <div class="card-header-custom">
                 <div class="lesson-image-container">
                   <img 
-                    :src="`/images/${lesson.image}`" 
+cd                     :src="`/images/${lesson.image}`" 
                     :alt="`${lesson.subject} at ${lesson.location}`"
                     class="lesson-image"
                     @error="onImageError"
