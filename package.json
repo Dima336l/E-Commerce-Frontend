@@ -4,9 +4,11 @@
   "description": "Vue.js frontend for after-school classes e-commerce app",
   "main": "index.js",
   "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "vite"
   },
   "dependencies": {
     "vue": "^3.3.4",
