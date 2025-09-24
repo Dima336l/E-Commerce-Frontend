@@ -46,6 +46,33 @@ export const useMainStore = defineStore('main', {
       this.cart = []
     },
 
+    async submitOrder(orderData) {
+      this.loading = true
+      try {
+        const response = await fetch('http://localhost:3000/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        })
+        
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.message || 'Failed to place order')
+        }
+        
+        const result = await response.json()
+        this.clearCart()
+        return result
+      } catch (error) {
+        this.error = error.message
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
     searchLessons(query) {
       if (!query) return this.lessons
       return this.lessons.filter(lesson =>
