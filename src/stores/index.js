@@ -234,9 +234,41 @@ export const useMainStore = defineStore('main', {
     // Search functionality - Backend search for "search as you type"
     async searchLessonsBackend(query) {
       if (!query) {
-        // If no query, fetch all lessons
-        await this.fetchLessons()
-        return this.lessons
+        // If no query, fetch all lessons without loading state
+        this.error = null
+        
+        try {
+          console.log('🔄 Fetching all lessons from backend...')
+          const response = await fetch(`${API_BASE_URL}/lessons`)
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+          }
+          
+          const lessonsData = await response.json()
+          console.log('✅ All lessons fetched successfully:', lessonsData.length, 'lessons')
+          
+          // Transform backend data to include icons
+          const iconsMap = {
+            'Mathematics': 'fas fa-calculator',
+            'English Literature': 'fas fa-book',
+            'Science': 'fas fa-flask',
+            'Art': 'fas fa-palette',
+            'Music': 'fas fa-music'
+          }
+          
+          this.lessons = lessonsData.map(lesson => ({
+            ...lesson,
+            icon: iconsMap[lesson.subject] || 'fas fa-book'
+          }))
+          
+          return this.lessons
+          
+        } catch (error) {
+          console.error('❌ Failed to fetch lessons:', error)
+          this.error = `Failed to fetch lessons: ${error.message}`
+          return []
+        }
       }
 
       this.error = null
