@@ -232,13 +232,13 @@ export const useMainStore = defineStore('main', {
     },
 
     // Search functionality - Backend search for "search as you type"
+    // Note: This does NOT set loading state to avoid spinner while typing
     async searchLessonsBackend(query) {
       if (!query) {
         // If no query, fetch all lessons without loading state
         this.error = null
         
         try {
-          console.log('🔄 Fetching all lessons from backend...')
           const response = await fetch(`${API_BASE_URL}/lessons`)
           
           if (!response.ok) {
@@ -246,7 +246,6 @@ export const useMainStore = defineStore('main', {
           }
           
           const lessonsData = await response.json()
-          console.log('✅ All lessons fetched successfully:', lessonsData.length, 'lessons')
           
           // Transform backend data to include icons
           const iconsMap = {
@@ -259,7 +258,8 @@ export const useMainStore = defineStore('main', {
           
           this.lessons = lessonsData.map(lesson => ({
             ...lesson,
-            icon: iconsMap[lesson.subject] || 'fas fa-book'
+            id: lesson._id, // MongoDB uses _id
+            icon: iconsMap[lesson.subject] || 'fas fa-graduation-cap'
           }))
           
           return this.lessons
@@ -274,7 +274,6 @@ export const useMainStore = defineStore('main', {
       this.error = null
       
       try {
-        console.log('🔍 Searching lessons on backend...', query)
         const response = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`)
         
         if (!response.ok) {
@@ -282,11 +281,9 @@ export const useMainStore = defineStore('main', {
         }
         
         const searchResponse = await response.json()
-        console.log('✅ Search response:', searchResponse)
         
         // Extract lessons from the response object
         const lessonsData = searchResponse.results || searchResponse
-        console.log('✅ Search results:', lessonsData.length, 'lessons found')
         
         // Transform backend data to include icons
         const iconsMap = {
@@ -299,7 +296,8 @@ export const useMainStore = defineStore('main', {
         
         this.lessons = lessonsData.map(lesson => ({
           ...lesson,
-          icon: iconsMap[lesson.subject] || 'fas fa-book'
+          id: lesson._id, // MongoDB uses _id
+          icon: iconsMap[lesson.subject] || 'fas fa-graduation-cap'
         }))
         
         return this.lessons

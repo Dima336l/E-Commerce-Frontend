@@ -89,12 +89,13 @@
 
         <!-- Classes Grid -->
         <div v-else class="classes-grid">
-          <div 
-            v-for="lesson in filteredLessons" 
-            :key="lesson.id" 
-            class="class-card-wrapper"
-          >
-            <div class="class-card">
+          <transition-group name="lesson-list" tag="div" class="classes-grid-inner">
+            <div 
+              v-for="lesson in filteredLessons" 
+              :key="lesson.id || lesson._id" 
+              class="class-card-wrapper"
+            >
+              <div class="class-card">
               <!-- Card Header with Image -->
               <div class="card-header-custom">
                 <div class="lesson-image-container">
@@ -141,7 +142,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </transition-group>
         </div>
 
         <!-- No Results -->
@@ -364,10 +365,33 @@ export default {
 }
 
 .classes-grid {
+  margin-top: 2rem;
+}
+
+.classes-grid-inner {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
-  margin-top: 2rem;
+}
+
+/* Smooth transitions for search results */
+.lesson-list-enter-active,
+.lesson-list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.lesson-list-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.lesson-list-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.lesson-list-move {
+  transition: transform 0.3s ease;
 }
 
 .class-card-wrapper {
