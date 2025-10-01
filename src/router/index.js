@@ -5,6 +5,11 @@ import Cart from '../views/Cart.vue'
 const routes = [
   {
     path: '/',
+    name: 'home',
+    redirect: '/lessons'
+  },
+  {
+    path: '/lessons',
     name: 'lessons',
     component: Lessons
   },

@@ -3,7 +3,7 @@
     <!-- Enhanced Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark shadow-lg">
       <div class="container">
-        <router-link to="/" class="navbar-brand d-flex align-items-center">
+        <router-link to="/lessons" class="navbar-brand d-flex align-items-center">
           <div class="brand-icon me-2">
             <i class="fas fa-graduation-cap"></i>
           </div>
@@ -14,7 +14,7 @@
         </router-link>
         
         <div class="navbar-nav ms-auto d-flex align-items-center">
-          <router-link to="/" class="nav-link me-3">
+          <router-link to="/lessons" class="nav-link me-3">
             <i class="fas fa-home me-1"></i>
             Classes
           </router-link>
