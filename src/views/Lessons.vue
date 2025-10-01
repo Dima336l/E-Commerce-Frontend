@@ -37,15 +37,13 @@
           <div class="row g-3">
             <div class="col-lg-6">
               <div class="search-box">
-                <i class="fas fa-search search-icon" v-if="!isSearching"></i>
-                <i class="fas fa-spinner fa-spin search-icon" v-if="isSearching"></i>
+                <i class="fas fa-search search-icon"></i>
                 <input 
                   type="text" 
                   class="form-control search-input" 
                   placeholder="Search for classes, locations, or subjects..." 
                   v-model="searchQuery"
                   @input="handleSearch"
-                  :disabled="isSearching"
                 >
               </div>
             </div>
@@ -178,8 +176,7 @@ export default {
       searchQuery: '',
       sortBy: 'subject',
       sortOrder: 'asc',
-      searchTimeout: null,
-      isSearching: false
+      searchTimeout: null
     }
   },
   computed: {
@@ -215,13 +212,10 @@ export default {
       
       // Set new timeout for search as you type with debouncing
       this.searchTimeout = setTimeout(async () => {
-        this.isSearching = true
         try {
           await this.store.searchLessonsBackend(this.searchQuery)
         } catch (error) {
           console.error('Search error:', error)
-        } finally {
-          this.isSearching = false
         }
       }, 300) // 300ms debounce delay
     },
