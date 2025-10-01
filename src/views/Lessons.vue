@@ -37,13 +37,15 @@
           <div class="row g-3">
             <div class="col-lg-6">
               <div class="search-box">
-                <i class="fas fa-search search-icon"></i>
+                <i class="fas fa-search search-icon" v-if="!isSearching"></i>
+                <i class="fas fa-spinner fa-spin search-icon" v-if="isSearching"></i>
                 <input 
                   type="text" 
                   class="form-control search-input" 
                   placeholder="Search for classes, locations, or subjects..." 
                   v-model="searchQuery"
                   @input="handleSearch"
+                  :disabled="isSearching"
                 >
               </div>
             </div>
@@ -150,7 +152,7 @@
             <i class="fas fa-search no-results-icon"></i>
             <h3>No classes found</h3>
             <p>Try adjusting your search or filter criteria</p>
-            <button class="btn btn-primary" @click="searchQuery = ''; sortBy = ''">
+            <button class="btn btn-primary" @click="clearFilters">
               <i class="fas fa-refresh me-2"></i>
               Clear Filters
             </button>
@@ -176,7 +178,8 @@ export default {
       searchQuery: '',
       sortBy: 'subject',
       sortOrder: 'asc',
-      searchTimeout: null
+      searchTimeout: null,
+      isSearching: false
     }
   },
   computed: {
@@ -193,8 +196,8 @@ export default {
       return this.store.error
     },
     filteredLessons() {
-      let filtered = this.store.searchLessons(this.searchQuery)
-      return this.store.sortLessons(filtered, this.sortBy, this.sortOrder)
+      // Since we're using backend search, just sort the lessons directly
+      return this.store.sortLessons(this.lessons, this.sortBy, this.sortOrder)
     }
   },
   methods: {
@@ -210,15 +213,33 @@ export default {
         clearTimeout(this.searchTimeout)
       }
       
-      // Set new timeout for search as you type
-      this.searchTimeout = setTimeout(() => {
-        // Search is handled by computed property
-      }, 300)
+      // Set new timeout for search as you type with debouncing
+      this.searchTimeout = setTimeout(async () => {
+        this.isSearching = true
+        try {
+          await this.store.searchLessonsBackend(this.searchQuery)
+        } catch (error) {
+          console.error('Search error:', error)
+        } finally {
+          this.isSearching = false
+        }
+      }, 300) // 300ms debounce delay
     },
     onImageError(event) {
       // Fallback to icon if image fails to load
       event.target.style.display = 'none'
       event.target.nextElementSibling.style.display = 'flex'
+    },
+    async clearFilters() {
+      this.searchQuery = ''
+      this.sortBy = 'subject'
+      this.sortOrder = 'asc'
+      // Clear any pending search timeout
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout)
+      }
+      // Fetch all lessons to reset the view
+      await this.store.fetchLessons()
     }
   },
   async mounted() {

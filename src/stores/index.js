@@ -231,7 +231,54 @@ export const useMainStore = defineStore('main', {
       }
     },
 
-    // Search functionality
+    // Search functionality - Backend search for "search as you type"
+    async searchLessonsBackend(query) {
+      if (!query) {
+        // If no query, fetch all lessons
+        await this.fetchLessons()
+        return this.lessons
+      }
+
+      this.loading = true
+      this.error = null
+      
+      try {
+        console.log('🔍 Searching lessons on backend...', query)
+        const response = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`)
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        }
+        
+        const lessonsData = await response.json()
+        console.log('✅ Search results:', lessonsData.length, 'lessons found')
+        
+        // Transform backend data to include icons
+        const iconsMap = {
+          'Mathematics': 'fas fa-calculator',
+          'English Literature': 'fas fa-book',
+          'Science': 'fas fa-flask',
+          'Art': 'fas fa-palette',
+          'Music': 'fas fa-music'
+        }
+        
+        this.lessons = lessonsData.map(lesson => ({
+          ...lesson,
+          icon: iconsMap[lesson.subject] || 'fas fa-book'
+        }))
+        
+        return this.lessons
+        
+      } catch (error) {
+        console.error('❌ Search failed:', error)
+        this.error = `Search failed: ${error.message}`
+        return []
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Frontend search functionality (fallback)
     searchLessons(query) {
       if (!query) return this.lessons
 
