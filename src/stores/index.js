@@ -239,7 +239,6 @@ export const useMainStore = defineStore('main', {
         return this.lessons
       }
 
-      this.loading = true
       this.error = null
       
       try {
@@ -277,8 +276,6 @@ export const useMainStore = defineStore('main', {
         console.error('❌ Search failed:', error)
         this.error = `Search failed: ${error.message}`
         return []
-      } finally {
-        this.loading = false
       }
     },
 
