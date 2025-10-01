@@ -99,7 +99,7 @@
               <div class="card-header-custom">
                 <div class="lesson-image-container">
                   <img 
-cd                     :src="`/images/${lesson.image}`" 
+                    :src="`${API_BASE_URL}/images/${lesson.image}`" 
                     :alt="`${lesson.subject} at ${lesson.location}`"
                     class="lesson-image"
                     @error="onImageError"
@@ -163,12 +163,13 @@ cd                     :src="`/images/${lesson.image}`"
 
 <script>
 import { useMainStore } from '../stores'
+import { API_BASE_URL } from '../config.js'
 
 export default {
   name: 'Lessons',
   setup() {
     const store = useMainStore()
-    return { store }
+    return { store, API_BASE_URL }
   },
   data() {
     return {
