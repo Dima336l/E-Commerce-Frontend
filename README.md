@@ -104,6 +104,4 @@ src/
 
 - Uses Vite for fast development and building
 - ESNext JavaScript with Vue 3 Composition API
-- Scoped CSS for component isolation
-- Modern browser support (ES2020+)
 - Hot module replacement for rapid development
