@@ -250,7 +250,11 @@ export const useMainStore = defineStore('main', {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`)
         }
         
-        const lessonsData = await response.json()
+        const searchResponse = await response.json()
+        console.log('✅ Search response:', searchResponse)
+        
+        // Extract lessons from the response object
+        const lessonsData = searchResponse.results || searchResponse
         console.log('✅ Search results:', lessonsData.length, 'lessons found')
         
         // Transform backend data to include icons
