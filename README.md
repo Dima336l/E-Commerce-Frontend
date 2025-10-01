@@ -104,4 +104,3 @@ src/
 
 - Uses Vite for fast development and building
 - ESNext JavaScript with Vue 3 Composition API
-- Hot module replacement for rapid development
