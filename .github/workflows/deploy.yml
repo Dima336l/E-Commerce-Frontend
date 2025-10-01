@@ -32,6 +32,17 @@ jobs:
           
       - name: Build
         run: npm run build
+        env:
+          NODE_ENV: production
+          VITE_API_URL: https://e-commerce-backend-w46y.onrender.com
+          
+      - name: Verify build output
+        run: |
+          echo "Build completed successfully"
+          echo "Build contents:"
+          ls -la ./dist/
+          echo "Checking index.html for base URL:"
+          grep -o 'base href="[^"]*"' ./dist/index.html || echo "No base href found"
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -52,3 +63,10 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        
+      - name: Deployment Info
+        run: |
+          echo "🎉 Deployment completed successfully!"
+          echo "📍 Your site is available at: https://dima336l.github.io/E-Commerce-Frontend/"
+          echo "🔗 Direct link to lessons: https://dima336l.github.io/E-Commerce-Frontend/#/lessons"
+          echo "🛒 Cart link: https://dima336l.github.io/E-Commerce-Frontend/#/cart"
