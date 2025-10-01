@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { API_BASE_URL } from '../config'
 
 export const useMainStore = defineStore('main', {
   state: () => ({
@@ -27,7 +28,7 @@ export const useMainStore = defineStore('main', {
       
       try {
         console.log('🔄 Fetching lessons from backend...')
-        const response = await fetch('http://localhost:3000/lessons')
+        const response = await fetch(`${API_BASE_URL}/lessons`)
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`)
@@ -57,7 +58,7 @@ export const useMainStore = defineStore('main', {
         
         // Fallback to show connection error with helpful message
         if (error.message.includes('fetch')) {
-          this.error = 'Cannot connect to server. Make sure the backend is running on http://localhost:3000'
+          this.error = `Cannot connect to server. Make sure the backend is running on ${API_BASE_URL}`
         }
       } finally {
         this.loading = false
@@ -161,7 +162,7 @@ export const useMainStore = defineStore('main', {
           }))
         }
 
-        const response = await fetch('http://localhost:3000/orders', {
+        const response = await fetch(`${API_BASE_URL}/orders`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -207,7 +208,7 @@ export const useMainStore = defineStore('main', {
 
     async updateLessonSpace(lessonId, newSpace) {
       try {
-        const response = await fetch(`http://localhost:3000/lessons/${lessonId}`, {
+        const response = await fetch(`${API_BASE_URL}/lessons/${lessonId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
