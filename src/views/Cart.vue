@@ -69,10 +69,36 @@
                           <i class="fas fa-map-marker-alt"></i>
                           {{ item.location }}
                         </span>
-                        <span class="item-quantity">
+                        <span class="item-availability">
                           <i class="fas fa-users"></i>
-                          {{ item.quantity }} {{ item.quantity === 1 ? 'space' : 'spaces' }}
+                          {{ getAvailableSpaces(item.id) }} spaces available
                         </span>
+                      </div>
+                    </div>
+                    
+                    <!-- Quantity Controls -->
+                    <div class="quantity-controls">
+                      <label class="quantity-label">Quantity:</label>
+                      <div class="quantity-buttons">
+                        <button 
+                          class="btn-quantity btn-quantity-minus"
+                          @click="decreaseQuantity(item.id)"
+                          :disabled="item.quantity <= 1"
+                          title="Decrease quantity"
+                        >
+                          <i class="fas fa-minus"></i>
+                        </button>
+                        
+                        <span class="quantity-display">{{ item.quantity }}</span>
+                        
+                        <button 
+                          class="btn-quantity btn-quantity-plus"
+                          @click="increaseQuantity(item.id)"
+                          :disabled="!canIncreaseQuantity(item.id)"
+                          title="Increase quantity"
+                        >
+                          <i class="fas fa-plus"></i>
+                        </button>
                       </div>
                     </div>
                     
@@ -251,6 +277,37 @@ export default {
   methods: {
     removeFromCart(lessonId) {
       this.store.removeFromCart(lessonId)
+    },
+    
+    // Quantity control methods
+    increaseQuantity(lessonId) {
+      const cartItem = this.store.cart.find(item => item.id === lessonId)
+      if (cartItem) {
+        const newQuantity = cartItem.quantity + 1
+        this.store.updateCartItemQuantity(lessonId, newQuantity)
+      }
+    },
+    
+    decreaseQuantity(lessonId) {
+      const cartItem = this.store.cart.find(item => item.id === lessonId)
+      if (cartItem && cartItem.quantity > 1) {
+        const newQuantity = cartItem.quantity - 1
+        this.store.updateCartItemQuantity(lessonId, newQuantity)
+      }
+    },
+    
+    canIncreaseQuantity(lessonId) {
+      const cartItem = this.store.cart.find(item => item.id === lessonId)
+      const lesson = this.store.lessons.find(l => l.id === lessonId)
+      if (cartItem && lesson) {
+        return lesson.space > 0
+      }
+      return false
+    },
+    
+    getAvailableSpaces(lessonId) {
+      const lesson = this.store.lessons.find(l => l.id === lessonId)
+      return lesson ? lesson.space : 0
     },
     validateName() {
       const nameRegex = /^[a-zA-Z\s]+$/
@@ -520,6 +577,94 @@ export default {
   font-size: 1.3rem;
   font-weight: 700;
   color: #10b981;
+}
+
+/* Quantity Controls */
+.quantity-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.quantity-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin: 0;
+}
+
+.quantity-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.25rem;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-quantity {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  color: #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-quantity:hover:not(:disabled) {
+  background: #667eea;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.btn-quantity:disabled {
+  background: #f1f5f9;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-quantity-minus {
+  color: #ef4444;
+}
+
+.btn-quantity-minus:hover:not(:disabled) {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-quantity-plus {
+  color: #10b981;
+}
+
+.btn-quantity-plus:hover:not(:disabled) {
+  background: #10b981;
+  color: white;
+}
+
+.quantity-display {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1e293b;
+  background: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
 }
 
 .btn-remove {
@@ -813,6 +958,16 @@ export default {
   .item-pricing {
     text-align: left;
     width: 100%;
+  }
+  
+  .quantity-controls {
+    width: 100%;
+    align-items: flex-start;
+  }
+  
+  .quantity-buttons {
+    width: 100%;
+    justify-content: center;
   }
   
   .checkout-card {
