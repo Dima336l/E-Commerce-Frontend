@@ -1,11 +1,12 @@
 # After-School Classes E-Commerce - Frontend
 
-> **Vue.js 3 SPA** | **Pinia State Management** | **Deployed on GitHub Pages**
+> **Vue.js 3 SPA** | **Pinia State Management** | **Hosted on GitHub Pages**
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://dima336l.github.io/)
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://dima336l.github.io/E-Commerce-Frontend/#/lessons)
 [![Vue.js](https://img.shields.io/badge/Vue.js-3.3.4-brightgreen)](https://vuejs.org/)
+[![GitHub Pages](https://img.shields.io/badge/deployed-GitHub%20Pages-blue)](https://pages.github.com/)
 
-**🌐 Live Application:** [https://dima336l.github.io/](https://dima336l.github.io/)  
+**🌐 Live on GitHub Pages:** [https://dima336l.github.io/E-Commerce-Frontend/#/lessons](https://dima336l.github.io/E-Commerce-Frontend/#/lessons)  
 **📦 Backend API:** [E-Commerce-Backend](https://github.com/Dima336l/E-Commerce-Backend)
 
 ---
@@ -147,23 +148,25 @@ handleSearch() {
 
 ---
 
-## 🌐 Deployment
+## 🌐 Deployment - GitHub Pages
 
-**Platform:** GitHub Pages  
-**URL:** [https://dima336l.github.io/](https://dima336l.github.io/)  
+**🔗 Hosted at:** [https://dima336l.github.io/E-Commerce-Frontend/#/lessons](https://dima336l.github.io/E-Commerce-Frontend/#/lessons)  
+**Platform:** GitHub Pages (Free Static Hosting)  
 **Method:** Automated via GitHub Actions
 
-**Deploy Process:**
+**How it works:**
 ```bash
 npm run build           # Creates dist/ folder
 git push origin main    # Triggers GitHub Actions
 # → Automatically deploys to gh-pages branch
+# → Live at dima336l.github.io/E-Commerce-Frontend
 ```
 
-**Config Notes:**
-- Hash routing (`createWebHashHistory`) for GitHub Pages compatibility
-- API URL auto-switches: local dev → `localhost:3000`, production → Render.com
-- CORS configured on backend for `https://dima336l.github.io`
+**GitHub Pages Configuration:**
+- ✅ Hash routing (`createWebHashHistory`) for client-side routing support
+- ✅ Automatic HTTPS via GitHub
+- ✅ API URL auto-switches: dev → `localhost:3000`, production → Render.com
+- ✅ CORS configured on backend to accept requests from GitHub Pages URL
 
 ---
 
@@ -197,8 +200,13 @@ actions: { fetchLessons(), submitOrder(), addToCart() }
 
 ## 🔗 Links
 
-**Frontend:** [GitHub](https://github.com/Dima336l/E-Commerce-Frontend) | [Live Demo](https://dima336l.github.io/)  
-**Backend:** [GitHub](https://github.com/Dima336l/E-Commerce-Backend) | [API](https://e-commerce-backend-w46y.onrender.com)
+**Frontend (GitHub Pages):**  
+- 🌐 **Live App:** [https://dima336l.github.io/E-Commerce-Frontend/#/lessons](https://dima336l.github.io/E-Commerce-Frontend/#/lessons)  
+- 📂 **Repository:** [github.com/Dima336l/E-Commerce-Frontend](https://github.com/Dima336l/E-Commerce-Frontend)
+
+**Backend (Render.com):**  
+- 🔌 **API:** [https://e-commerce-backend-w46y.onrender.com](https://e-commerce-backend-w46y.onrender.com)  
+- 📂 **Repository:** [github.com/Dima336l/E-Commerce-Backend](https://github.com/Dima336l/E-Commerce-Backend)
 
 ---
 
