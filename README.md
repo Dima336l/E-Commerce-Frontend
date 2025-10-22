@@ -19,6 +19,203 @@ Full-stack e-commerce platform for booking after-school educational classes. Bui
 
 ---
 
+## 🏗️ Frontend Architecture
+
+```mermaid
+graph TB
+    %% User Interface Layer
+    Browser[🌐 Browser]
+    User[👤 User]
+    
+    %% Hosting Layer
+    GitHubPages[📄 GitHub Pages]
+    CDN[☁️ CDN Assets]
+    
+    %% Application Layer
+    VueApp[⚡ Vue.js 3 SPA]
+    Router[🛣️ Vue Router]
+    Store[🗄️ Pinia Store]
+    
+    %% Component Architecture
+    AppComponent[📱 App.vue]
+    LessonsView[📚 Lessons.vue]
+    CartView[🛒 Cart.vue]
+    Chatbot[🤖 Chatbot.vue]
+    
+    %% State Management
+    LessonsState[📖 Lessons State]
+    CartState[🛒 Cart State]
+    LoadingState[⏳ Loading State]
+    ErrorState[❌ Error State]
+    
+    %% API Integration
+    FetchAPI[🌐 Fetch API]
+    BackendAPI[🔗 Backend API]
+    
+    %% Backend Services
+    RenderAPI[☁️ Render.com API]
+    MongoDB[(🗄️ MongoDB Atlas)]
+    
+    %% Data Flow
+    User --> Browser
+    Browser --> GitHubPages
+    GitHubPages --> CDN
+    CDN --> VueApp
+    
+    VueApp --> Router
+    VueApp --> Store
+    VueApp --> AppComponent
+    
+    AppComponent --> LessonsView
+    AppComponent --> CartView
+    AppComponent --> Chatbot
+    
+    Store --> LessonsState
+    Store --> CartState
+    Store --> LoadingState
+    Store --> ErrorState
+    
+    LessonsView --> FetchAPI
+    CartView --> FetchAPI
+    Chatbot --> FetchAPI
+    
+    FetchAPI --> BackendAPI
+    BackendAPI --> RenderAPI
+    RenderAPI --> MongoDB
+    
+    %% Styling
+    classDef user fill:#e3f2fd,stroke:#0277bd,stroke-width:2px
+    classDef hosting fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef vue fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef components fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef state fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef api fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+    classDef backend fill:#f1f8e9,stroke:#558b2f,stroke-width:2px
+    
+    class User,Browser user
+    class GitHubPages,CDN hosting
+    class VueApp,Router vue
+    class AppComponent,LessonsView,CartView,Chatbot components
+    class LessonsState,CartState,LoadingState,ErrorState,Store state
+    class FetchAPI,BackendAPI api
+    class RenderAPI,MongoDB backend
+```
+
+### 🔄 Component Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant B as Browser
+    participant V as Vue App
+    participant S as Pinia Store
+    participant A as API
+    participant R as Render Backend
+    participant DB as MongoDB
+    
+    Note over U,DB: Application Initialization
+    U->>B: Load Application
+    B->>V: Mount Vue App
+    V->>S: Initialize Store
+    V->>A: Fetch Lessons
+    A->>R: GET /lessons
+    R->>DB: Query lessons collection
+    DB-->>R: Return lessons data
+    R-->>A: JSON Response
+    A-->>S: Update lessons state
+    S-->>V: Reactive update
+    V-->>B: Render UI
+    
+    Note over U,DB: User Interactions
+    U->>V: Browse/Search Lessons
+    V->>S: Update search state
+    S->>A: Search API call
+    A->>R: GET /search?q=query
+    R->>DB: Search lessons
+    DB-->>R: Filtered results
+    R-->>A: Search results
+    A-->>S: Update lessons
+    S-->>V: Show filtered results
+    
+    U->>V: Add to Cart
+    V->>S: Update cart state
+    S-->>V: Update cart UI
+    
+    U->>V: Proceed to Checkout
+    V->>S: Get cart data
+    S->>A: Submit order
+    A->>R: POST /orders
+    R->>DB: Create order & update spaces
+    DB-->>R: Order confirmation
+    R-->>A: Success response
+    A-->>S: Clear cart
+    S-->>V: Show success message
+```
+
+### 🧩 Component Architecture
+
+```mermaid
+graph TD
+    %% Root Component
+    App[📱 App.vue<br/>Root Component]
+    
+    %% Navigation
+    Navbar[🧭 Navigation Bar<br/>Cart Button & Branding]
+    
+    %% Main Views
+    LessonsView[📚 Lessons.vue<br/>Class Browser]
+    CartView[🛒 Cart.vue<br/>Shopping Cart]
+    
+    %% Chatbot
+    Chatbot[🤖 Chatbot.vue<br/>AI Assistant]
+    
+    %% Sub-components
+    LessonCard[📋 Lesson Card<br/>Individual Class Display]
+    SearchBar[🔍 Search & Filters<br/>Real-time Search]
+    CartItem[🛍️ Cart Item<br/>Quantity Controls]
+    CheckoutForm[📝 Checkout Form<br/>Customer Details]
+    
+    %% State Management
+    PiniaStore[🗄️ Pinia Store<br/>Centralized State]
+    
+    %% API Layer
+    APIService[🌐 API Service<br/>Fetch Integration]
+    
+    %% Component Relationships
+    App --> Navbar
+    App --> LessonsView
+    App --> CartView
+    App --> Chatbot
+    
+    LessonsView --> LessonCard
+    LessonsView --> SearchBar
+    
+    CartView --> CartItem
+    CartView --> CheckoutForm
+    
+    App --> PiniaStore
+    LessonsView --> PiniaStore
+    CartView --> PiniaStore
+    Chatbot --> PiniaStore
+    
+    PiniaStore --> APIService
+    
+    %% Styling
+    classDef root fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+    classDef views fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef components fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef state fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef api fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+    
+    class App root
+    class LessonsView,CartView,Navbar,Chatbot views
+    class LessonCard,SearchBar,CartItem,CheckoutForm components
+    class PiniaStore state
+    class APIService api
+```
+
+---
+
 ## ✨ What I Built
 
 ### Core Features
