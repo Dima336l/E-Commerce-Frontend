@@ -53,13 +53,20 @@
         </div>
       </div>
     </footer>
+
+    <!-- Chatbot -->
+    <Chatbot />
   </div>
 </template>
 
 <script>
 import { useMainStore } from './stores'
+import Chatbot from './components/Chatbot.vue'
 
 export default {
+  components: {
+    Chatbot
+  },
   name: 'App',
   setup() {
     const store = useMainStore()
