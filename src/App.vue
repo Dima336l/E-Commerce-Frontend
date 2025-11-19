@@ -22,6 +22,7 @@
           <button 
             class="btn btn-cart position-relative me-2" 
             @click="toggleCart"
+            :disabled="!isCartButtonEnabled"
             :class="{ 'btn-cart-active': cart.length > 0 }"
           >
             <i class="fas fa-shopping-cart me-2"></i>
@@ -75,11 +76,22 @@ export default {
   computed: {
     cart() {
       return this.store.cart
+    },
+    isCartButtonEnabled() {
+      const isOnCartPage = this.$route.path === '/cart'
+      return this.cart.length > 0 || isOnCartPage
     }
   },
   methods: {
     toggleCart() {
-      this.$router.push('/cart')
+      if (this.$route.path === '/cart') {
+        this.$router.push('/lessons')
+        return
+      }
+
+      if (this.cart.length > 0) {
+        this.$router.push('/cart')
+      }
     }
   }
 }
@@ -166,6 +178,13 @@ export default {
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-cart:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-cart-active {
