@@ -199,42 +199,6 @@ export default {
     const generateBotResponse = (userMessage) => {
       const message = userMessage.toLowerCase()
       
-      // Class availability
-      if (message.includes('class') || message.includes('available') || message.includes('what') || message.includes('show me all')) {
-        const totalClasses = store.lessons.length
-        const availableClasses = store.availableLessons.length
-        
-        if (totalClasses > 0) {
-          let response = `📚 We have <strong>${totalClasses} classes</strong> available with <strong>${availableClasses}</strong> having open spots!<br><br>`
-          
-          if (message.includes('show me all') || message.includes('list all')) {
-            response += `<strong>All Available Classes:</strong><br>`
-            
-            store.lessons.slice(0, 5).forEach(lesson => {
-              const status = lesson.space > 0 ? `✅ ${lesson.space} spots` : '❌ Full'
-              const icon = lesson.subject === 'Mathematics' ? '🧮' : 
-                          lesson.subject === 'Science' ? '🔬' : 
-                          lesson.subject === 'Art' ? '🎨' : 
-                          lesson.subject === 'Music' ? '🎵' : 
-                          lesson.subject === 'English Literature' ? '📖' : '📚'
-              
-              response += `${icon} <strong>${lesson.subject}</strong> in ${lesson.location}<br>`
-              response += `  💰 £${lesson.price} | ${status}<br><br>`
-            })
-            
-            if (store.lessons.length > 5) {
-              response += `...and ${store.lessons.length - 5} more classes! Check the main page for the complete list.`
-            }
-          } else {
-            response += `You can browse all classes on the main page. Would you like me to help you find something specific?`
-          }
-          
-          return response
-        }
-        
-        return `📚 We have classes available! Check out our main page to see all options. Would you like me to help you find something specific?`
-      }
-      
       // Math classes
       if (message.includes('math') || message.includes('mathematics')) {
         const mathClasses = store.lessons.filter(l => l.subject.toLowerCase().includes('math'))
@@ -431,6 +395,48 @@ export default {
           return response
         }
         return `📖 Our English Literature classes are designed to enhance reading, writing, and critical thinking skills. Perfect for all levels!`
+      }
+      
+      // General class availability (kept after specific subjects to avoid intercepting)
+      if (
+        message.includes('class') || 
+        message.includes('available') || 
+        message.includes('what') || 
+        message.includes('show me all') ||
+        message.includes('list all')
+      ) {
+        const totalClasses = store.lessons.length
+        const availableClasses = store.availableLessons.length
+        
+        if (totalClasses > 0) {
+          let response = `📚 We have <strong>${totalClasses} classes</strong> available with <strong>${availableClasses}</strong> having open spots!<br><br>`
+          
+          if (message.includes('show me all') || message.includes('list all')) {
+            response += `<strong>All Available Classes:</strong><br>`
+            
+            store.lessons.slice(0, 5).forEach(lesson => {
+              const status = lesson.space > 0 ? `✅ ${lesson.space} spots` : '❌ Full'
+              const icon = lesson.subject === 'Mathematics' ? '🧮' : 
+                          lesson.subject === 'Science' ? '🔬' : 
+                          lesson.subject === 'Art' ? '🎨' : 
+                          lesson.subject === 'Music' ? '🎵' : 
+                          lesson.subject === 'English Literature' ? '📖' : '📚'
+              
+              response += `${icon} <strong>${lesson.subject}</strong> in ${lesson.location}<br>`
+              response += `  💰 £${lesson.price} | ${status}<br><br>`
+            })
+            
+            if (store.lessons.length > 5) {
+              response += `...and ${store.lessons.length - 5} more classes! Check the main page for the complete list.`
+            }
+          } else {
+            response += `You can browse all classes on the main page. Would you like me to help you find something specific?`
+          }
+          
+          return response
+        }
+        
+        return `📚 We have classes available! Check out our main page to see all options. Would you like me to help you find something specific?`
       }
       
       // Help
